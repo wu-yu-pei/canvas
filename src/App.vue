@@ -7,20 +7,26 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 import { $, $ref, $computed } from 'vue/macros'
+import { Line, Point } from './app.type'
 
 const canvasEl = $ref<HTMLCanvasElement>()
 let ctx = $computed(() => canvasEl.getContext('2d')!)
 
-onMounted(() => {
-  canvasEl.width = document.body.clientWidth - 20
-  canvasEl.height = document.body.clientHeight - 20
 
+onMounted(() => {
+  canvasEl.width = document.body.clientWidth - 5
+  canvasEl.height = document.body.clientHeight - 5
   init()
   init()
+  document.addEventListener('click', () => {
+    ctx.clearRect(0, 0, canvasEl.width, canvasEl.height)
+    init()
+    init()
+  })
 })
 
 async function init() {
-  ctx.strokeStyle = '#ff0'
+  ctx.strokeStyle = '#fff'
   ctx.beginPath()
 
   let e = drow(genertionStratLine())
@@ -34,23 +40,9 @@ async function init() {
     }
   }
 
-  let arr = []
-
   ctx.closePath()
   ctx.stroke()
   ctx.stroke()
-}
-
-interface Point {
-  x: number
-  y: number
-}
-
-interface Line {
-  start: Point
-  end: Point
-  angue?: number
-  len?: number
 }
 
 function drow(line: Line): Point {
@@ -114,7 +106,6 @@ function sleep(time: any) {
 }
 canvas {
   box-sizing: border-box;
-  border: 1px solid #000;
   background-color: #f5f5d5;
 }
 </style>
